@@ -15,13 +15,16 @@ function App() {
   const [response, setResponse] = useState("");
   const [disable, setDisable] = React.useState(false);
   const [statusofstartbutton,setStatusofstartbutton] = useState(false);
+  const [valueofstart,setStart] = useState('Start Task')
+  const [valueofbreak,setBreak] = useState('Start Break')
+  const [valueofmal,setMal] = useState('Start Malfunction')
   const [statusofbreakbutton,setStatusofbreakbutton] = useState(false);
   const [statusofmalfunctionbutton,setStatusofmalfunctionbutton] = useState(false);
+  const [mintime,setMintime] = useState(2)
   // const mac="01.00.02.0";
   // const mac="123.0.0.0"
   // const password="abcd1234";
   // const auth = {"mac":mac,"password":password};
-  const mintime = 2
   const handleMacChange = (event) => {
     setMac(event.target.value);
   };
@@ -31,6 +34,7 @@ function App() {
   };
   useEffect(()=>{
     setSocket(io('http://139.59.92.20:5000'));
+    // setSocket(io('http://localhost:5000'));
   },[disable]);
   useEffect(()=>{
     if(!socket) return;
@@ -45,6 +49,10 @@ function App() {
       });
     socket.on('order_component_mintime',function(order_component_mintime){
         console.log(order_component_mintime)
+        var mini = order_component_mintime.substring(
+          order_component_mintime.lastIndexOf("_") + 1,order_component_mintime.length );
+        mini = parseInt(mini);
+        setMintime(mini)
       });
     socket.on('stresponse',function(output){
         console.log(output);
@@ -67,9 +75,9 @@ function App() {
     socket.on('user.logout.expired',function(output){
         console.log(output)
       });
-    socket.on('disconnect',()=>{
+    // socket.on('disconnect',()=>{
 
-      })
+    //   })
   },[socket]);
   function sendtoserver(event,timestamp){
     console.log({sessionid})
@@ -83,12 +91,14 @@ function App() {
             var timeClient = Math.floor(Date.now()*0.001)
             sendtoserver("eb", timeClient);
             setStatusofbreakbutton(false);
+            setBreak('Start Break');
         }
         if (statusofmalfunctionbutton == true)
         {
             var timeClient = Math.floor(Date.now()*0.001)
             sendtoserver("em", timeClient);
             setStatusofmalfunctionbutton(false);
+            setMal('Start Malfunction');
         }
         if (statusofstartbutton == false)
         {
@@ -96,6 +106,7 @@ function App() {
             setTimestamp(timeClient);
             sendtoserver("st", timeClient);
             setStatusofstartbutton(true);
+            setStart('End Task');
         }
         else
         {
@@ -105,10 +116,12 @@ function App() {
                 sendtoserver("et", timeClient);
 
                 setStatusofstartbutton(true);
+                setStart('Start Task');
             }
             else
             {
                 console.log("Interval is less than mintime");
+                alert("Interval is less than min_time");
             }
         }
       // socket.on('stresponse',function(output){
@@ -151,10 +164,12 @@ function App() {
            {
                sendtoserver("et", timeClient);
                setStatusofstartbutton(false);
+               setStart('Start Task')
                if (statusofbreakbutton == false)
                {
                    sendtoserver("sb", timeClient);
                    setStatusofbreakbutton(true);
+                   setBreak('End Break')
                }
            }
            else
@@ -167,10 +182,12 @@ function App() {
            var timeClient = Math.floor(Date.now()*0.001)
            sendtoserver("sb", timeClient);
            setStatusofbreakbutton(true);
+           setBreak('End Break')
        }
        else
        {
            console.log("Start a task to end your break");
+           alert("Start a task to end your break")
        }
   }
   function startmal(e){
@@ -179,6 +196,7 @@ function App() {
        var timeClient = Math.floor(Date.now()*0.001)
        sendtoserver("sm",timeClient);
        setStatusofmalfunctionbutton(true);
+       setMal('End Malfunction')
      }
     //  socket.on('smresponse',function(output){
     //   console.log(output);
@@ -188,8 +206,7 @@ function App() {
     // });
   }
   function disconnect(e){
-    console.log('Pressed Disconnect')
-    socket.disconnect(true)
+    window.location.reload();
   }
   function connect(e){
     setDisable(true)
@@ -215,16 +232,20 @@ function App() {
                 <Divider type="horizontal" />  
               <Divider type="vertical" />
               <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={starttask} style={{backgroundColor:'green'}}>
-                Start Task
+                {valueofstart}
               </Button>
               <Divider type="vertical" />
               <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={startbreak} style={{backgroundColor:'yellow'}}>
-                Start Break
+                {valueofbreak}
               </Button>
               <Divider type="vertical" />
               <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={startmal} style={{backgroundColor:'red'}}>
-                Start Malfunction
+                {valueofmal}
               </Button>
+              <Divider type="horizontal" />
+              <Button styletype="primary" shape="round" size="large" style={{ backgroundColor: "black", border: "0", color: "white" }} onClick={disconnect}>
+                  Disconnect
+                </Button>
             </Form.Item>
           </Form>
         </Card>
