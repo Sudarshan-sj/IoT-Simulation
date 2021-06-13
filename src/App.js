@@ -44,6 +44,7 @@ function App() {
     });
     socket.on('user.loggedin', function (sessionId) {
         // setSessionid(sessionId)
+        alert("You are connected to server.")
         console.log(sessionId)
         setSessionid(sessionId)
       });
@@ -73,6 +74,7 @@ function App() {
         console.log(output);
       });
     socket.on('user.logout.expired',function(output){
+      alert(output);
         console.log(output)
       });
     // socket.on('disconnect',()=>{
@@ -115,8 +117,15 @@ function App() {
             {
                 sendtoserver("et", timeClient);
 
-                setStatusofstartbutton(true);
+                setStatusofstartbutton(false);
                 setStart('Start Task');
+                if (statusofbreakbutton == false)
+                {
+                  var timeClient = Math.floor(Date.now()*0.001)
+                  sendtoserver("sb", timeClient);
+                  setStatusofbreakbutton(true);
+                  setBreak('End Break');
+                }
             }
             else
             {
@@ -197,7 +206,18 @@ function App() {
        sendtoserver("sm",timeClient);
        setStatusofmalfunctionbutton(true);
        setMal('End Malfunction')
+       if(statusofstartbutton==true){
+       sendtoserver("et", timeClient);
+       setStatusofstartbutton(false);
+       setStart('Start Task');
+       }
+
      }
+     else
+       {
+           console.log("Start a task to end your malfunction");
+           alert("Start a task to end your malfunction")
+       }
     //  socket.on('smresponse',function(output){
     //   console.log(output);
     // });
