@@ -226,26 +226,40 @@ function App() {
               <Input.Password name="password" placeholder="Enter password" onChange={handlePasswordChange} value={password} id='passid'prefix={<LockOutlined style={{ color: "#00b359" }} />} type="password" placeholder="Password" />
             </Form.Item>
             <Form.Item type="flex" justify="center" align="middle">
-                <Button styletype="primary" shape="round" size="large" style={{ backgroundColor: "black", border: "0", color: "white" }} type="submit" disabled={disable} onClick={connect}>
+              <Row align="middle" style={{marginTop: "10px"}}>
+                <Col xs={{span:0}} md={{span:6}} lg={{span:6}}></Col>
+                <Col xs={{span:12}} md={{span:6}} lg={{span:6}}>
+                <Button  styletype="primary" shape="round" size="large" style={{ backgroundColor: "black", border: "0", color: "white" }} type="submit" disabled={disable} onClick={connect}>
                   Connect
                 </Button>
-                <Divider type="horizontal" />  
-              <Divider type="vertical" />
-              <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={starttask} style={{backgroundColor:'green'}}>
-                {valueofstart}
-              </Button>
-              <Divider type="vertical" />
-              <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={startbreak} style={{backgroundColor:'yellow'}}>
-                {valueofbreak}
-              </Button>
-              <Divider type="vertical" />
-              <Button styletype="primary" htmlType="submit" shape="round" size="large" onClick={startmal} style={{backgroundColor:'red'}}>
-                {valueofmal}
-              </Button>
-              <Divider type="horizontal" />
-              <Button styletype="primary" shape="round" size="large" style={{ backgroundColor: "black", border: "0", color: "white" }} onClick={disconnect}>
+                </Col>
+                <Col xs={{span:12}} md={{span:6}} lg={{span:6}}>
+                <Button styletype="primary" shape="round" size="large" style={{ backgroundColor: "black", border: "0", color: "white" }} onClick={disconnect}>
                   Disconnect
                 </Button>
+                </Col>
+                <Col xs={{span:0}} md={{span:6}} lg={{span:6}}></Col>
+              </Row>
+              {/* <Divider type="horizontal" />   */}
+              <Row style={{marginTop:"30px"}}>
+                <Col style={{marginTop:"10px"}} xs={{span:24}} md={{span:8}} lg={{span:8}}>
+                <Button type="flex" styletype="primary" shape="round" htmlType="submit"  size="large" onClick={starttask} style={{backgroundColor:'green'}}>
+                {valueofstart}
+                </Button>
+                </Col>
+                <Col  xs={{span:0}} md={{span:0}} lg={{span:0}}></Col>
+                <Col style={{marginTop:"10px"}} xs={{span:24}} md={{span:8}} lg={{span:8}}>
+                <Button type="flex" styletype="primary" shape="round" htmlType="submit"  size="large" onClick={startbreak} style={{backgroundColor:'yellow'}}>
+                {valueofbreak}
+                </Button>
+                </Col>
+                <Col xs={{span:0}} md={{span:0}} lg={{span:0}}></Col>
+                <Col style={{marginTop:"10px"}} xs={{span:24}} md={{span:8}} lg={{span:8}}>
+                <Button type="flex" styletype="primary" shape="round" htmlType="submit"  size="large" onClick={startmal} style={{backgroundColor:'red'}}>
+                {valueofmal}
+                </Button>
+                </Col>
+              </Row>
             </Form.Item>
           </Form>
         </Card>

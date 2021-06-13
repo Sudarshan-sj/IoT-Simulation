@@ -671,7 +671,7 @@ Drawer.......Start
 .authcard{
   background-color: var(--main-bg-color);
   width: 100%;
-  height: 50vh;
+  height: 65vh;
 }
 
 .authcard > .ant-card-body {
